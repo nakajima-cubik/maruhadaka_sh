@@ -19,9 +19,9 @@ maruhadaka[dir]
 注意：実行中は書き出ししているファイルパスを画面上へ出力し続けます。不要の場合は91行目の ”echo "$file"” をコメントアウトしてください。
 
 
-1. ”exclusionlist.txt” を編集
-2. ”inclusionlist.txt” を編集
-3. ”maruhadaka.sh” を実行
+*. ”exclusionlist.txt” を編集
+**. ”inclusionlist.txt” を編集
+***. ”maruhadaka.sh” を実行
 
 
 log_YYYYMMDD_hhmmss[dir]
