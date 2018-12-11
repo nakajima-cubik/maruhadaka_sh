@@ -7,10 +7,6 @@ exclusion_dirs=(
     /boot
     /dev
     /lost+found
-
-
-
-    
     /media
     /mnt
     /proc
