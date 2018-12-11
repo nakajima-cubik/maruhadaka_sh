@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -xv
 # maruhadaka.sh  written by Yoshiki Nakajima
 
 # 実行スクリプトのファイル位置を取得
