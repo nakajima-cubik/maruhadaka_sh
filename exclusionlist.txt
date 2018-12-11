@@ -1,0 +1,17 @@
+#!/bin/bash
+# exclusionlist.txt written by Yoshiki Nakajima
+
+# ルート直下にあるディレクトリで検索対象外としたいディレクトリ名を記載する
+# 注意： ”exclusion_dirs=(” と、最終行の ”)” を削除しないこと
+exclusion_dirs=(
+    /boot
+    /dev
+    /lost+found
+    /media
+    /mnt
+    /proc
+    /selinux
+    /sys
+    /tmp
+    /var
+    )

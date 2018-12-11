@@ -1,0 +1,7 @@
+#!/bin/bash
+# inclusionlist.txt written by Yoshiki Nakajima
+
+# ”exclusionlist.txt”にて指定したディレクトリ配下に、取得したいパスがある場合には記載すること
+inclusion_dirs=(
+    /var/service
+    )
