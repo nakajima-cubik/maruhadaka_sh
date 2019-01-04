@@ -12,14 +12,14 @@ log_name=`hostname`_log_$(date +%Y%m%d_%H%M%S)
 log_dir=${script_dir}/${log_name}
 
 # ディレクトリが無ければ作成する
-echo "directory creation..."
+echo -e "\e[36mdirectory creation...\e[m"
 if [ ! -d "${log_dir}" ]; then
   mkdir "${log_dir}" ||exit
 fi
-echo "done"
+echo -e "\e[36mdone\e[m"
 
 # tmpリスト作成
-echo "list creation..."
+echo -e "\e[36mlist creation...\e[m"
 tmplist=$(mktemp "${script_dir}/maruhadaka.tmp.XXXXX" ||exit)
 
 # 除外リスト定義
@@ -28,7 +28,7 @@ tmplist=$(mktemp "${script_dir}/maruhadaka.tmp.XXXXX" ||exit)
 # 含めるリストを定義
 . "${script_dir}"/inclusionlist.txt
 
-echo "done"
+echo -e "\e[36mdone\e[m"
 
 # 引数で渡ってきたディレクトリ名が除外リストにあるか判定する
 function isNotExistsExclusionDirs() {
@@ -58,17 +58,17 @@ function isNotBinary() {
   fi
 }
 
-echo "start acquiring..."
+echo -e "\e[36mstart acquiring...\e[m"
 
 # CentOSのMajor Versionを判定する
 major_version=$(cat /etc/redhat-release | sed -e 's/.*\s\([0-9]\)\..*/\1/')
 
 # メモリ、CPU、DiskI/O の事前取得
-echo "vmstat -t > CMDvmstat.txt"
+echo -e "\e[36mvmstat -t > CMDvmstat.txt\e[m"
 (echo -e \\n"==================== BEFORE ===================="\\n ;vmstat -t ) |gzip > "$log_dir"/"$(date +%Y%m%d)"_CMDvmstat.txt.gz
 
 # ルート直下ディレクトリを検索
-echo "cat /* > *.txt"
+echo -e "\e[36mcat /* > *.txt\e[m"
 files="/*"
 for dir in $files ;
 do
@@ -118,27 +118,27 @@ IFS=$IFS_OLD
 file_name=$(date +%Y%m%d)_
 
 # インストール済rpmパッケージを確認する
-echo "rpm -qa --last > CMDrpm.txt"
+echo -e "\e[36mrpm -qa --last > CMDrpm.txt\e[m"
 rpm -qa --last |gzip > "$log_dir"/"$file_name"CMDrpm.txt.gz
-echo "rpm -qa --qf > CMDrpmname.txt"
+echo -e "\e[36mrpm -qa --qf > CMDrpmname.txt\e[m"
 rpm -qa --qf '%{name}\n' |gzip > "$log_dir"/"$file_name"CMDrpmname.txt.gz
 
 # カーネル内部のパラメータを確認する
-echo "sysctl -a > CMDrpmname.txt"
+echo -e "\e[36msysctl -a > CMDrpmname.txt\e[m"
 sysctl -a |gzip > "$log_dir"/"$file_name"CMDsysctl.txt.gz
 
 # インストール済gemの一覧を確認する
-echo "gem list > CMDrpmname.txt"
+echo -e "\e[36mgem list > CMDrpmname.txt\e[m"
 gem list |gzip > "$log_dir"/"$file_name"CMDgem.txt.gz
 
 # インストール済pipの一覧を確認する
-echo "pip list > CMDpip.txt"
+echo -e "\e[36mpip list > CMDpip.txt\e[m"
 pip list |gzip > "$log_dir"/"$file_name"CMDpip.txt.gz
-echo "pip3 list > CMDpip3.txt"
+echo -e "\e[36mpip3 list > CMDpip3.txt\e[m"
 pip3 list --format=legacy |gzip > "$log_dir"/"$file_name"CMDpip3.txt.gz
 
 # 設定されているcronを確認する
-echo "crontab -l > CMDcron.txt"
+echo -e "\e[36mcrontab -l > CMDcron.txt\e[m"
 for user in $(cut -f1 -d: /etc/passwd); 
 do 
   echo $user; crontab -u $user -l; 
@@ -147,16 +147,16 @@ done |gzip > "$log_dir"/"$file_name"CMDcron.txt.gz
 # ポートおよびルーティング情報を確認する
 #6系の場合
 if [ "$major_version" -eq 6 ] ; then
-  echo "netstat -anp > CMDnetstatanp.txt"
+  echo -e "\e[36mnetstat -anp > CMDnetstatanp.txt\e[m"
   netstat -anp |gzip > "$log_dir"/"$file_name"CMDnetstatanp.txt.gz
-  echo "netstat -nr > CMDnetstatnr.txt"
+  echo -e "\e[36mnetstat -nr > CMDnetstatnr.txt\e[m"
   netstat -nr |gzip > "$log_dir"/"$file_name"CMDnetstatnr.txt.gz
 #7系の場合
 else
   if [ "$major_version" -eq 7 ] ; then
-    echo "ss -anp > CMDssanp.txt"
+    echo -e "\e[36mss -anp > CMDssanp.txt\e[m"
     ss -anp |gzip > "$log_dir"/"$file_name"CMDssanp.txt.gz
-    echo "routel > CMDroutel.txt"
+    echo -e "\e[36mroutel > CMDroutel.txt\e[m"
     routel |gzip > "$log_dir"/"$file_name"CMDroutel.txt.gz
   fi
 fi
@@ -164,7 +164,7 @@ fi
 # ファイアウォール関連の確認をする stubl7にてiptableのインストールを確認 (2018/11/29)
 ##6系の場合
 #if [ "$major_version" -eq 6 ] ; then
-  echo "iptables --list > CMDiptables.txt"
+  echo -e "\e[36miptables --list > CMDiptables.txt\e[m"
   iptables --list |gzip > "$log_dir"/"$file_name"CMDiptables.txt.gz
 ##7系の場合
 #else
@@ -177,22 +177,22 @@ fi
 #fi
 
 # パーミッション等の情報取得
-echo "ls -lRa > CMDlslRa.txt"
+echo -e "\e[36mls -lRa > CMDlslRa.txt\e[m"
 ls -lRa / |gzip > "$log_dir"/"$file_name"CMDlslRa.txt.gz
 
 # プロセス情報取得
-echo "ps -A > CMDps.txt"
+echo -e "\e[36mps -A > CMDps.txt\e[m"
 ps -A o user,command --no-header --sort command | grep -v -e '\s\['|gzip > "$log_dir"/"$file_name"CMDps.txt.gz
 
 # 高頻度で使用されるディレクトリの情報取得
-echo "du -m > CMDdusize.txt"
+echo -e "\e[36mdu -m > CMDdusize.txt"
 du -m / --max-depth=3 --exclude="/proc*" | sort -k1 -n -r |gzip > "$log_dir"/"$file_name"CMDdusize.txt.gz
 
 # メモリ、CPU、DiskI/O の事後取得
 (echo -e \\n"==================== AFTER  ===================="\\n ;vmstat -t ) |gzip >> "$log_dir"/"$file_name"CMDvmstat.txt.gz
 
 # 結果ファイルを圧縮
-echo -e \\n\\n"Archiving files..."\\n\\n
+echo -e \\n\\n"\e[36mArchiving files...\e[m"\\n\\n
 tar cvf "$log_name".tar -C "$(pwd)" "$log_name"
 
 if [ -d "$log_name" ]; then
