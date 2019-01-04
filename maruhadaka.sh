@@ -111,6 +111,17 @@ do
   done
 done
 
+for line in `cat "$tmplist"` ;
+do
+  # ファイル名の設定
+  file_name=$(date +%Y%m%d)${line//"/"/_}
+  echo -e "\e[36mls -lRa > CMDlslRa.txt\e[m"
+  for file in $(ionice -c 2 -n 7 nice -n 19 ls -lRa "$line");
+  do
+    echo "$file"|gzip >> "$log_dir"/"$file_name"_lslRa.txt.gz
+  done
+done
+
 # 区切り文字を元の値に
 IFS=$IFS_OLD
 
@@ -176,17 +187,9 @@ fi
 #  fi
 #fi
 
-# パーミッション等の情報取得
-echo -e "\e[36mls -lRa > CMDlslRa.txt\e[m"
-ls -lRa / |gzip > "$log_dir"/"$file_name"CMDlslRa.txt.gz
-
 # プロセス情報取得
 echo -e "\e[36mps -A > CMDps.txt\e[m"
 ps -A o user,command --no-header --sort command | grep -v -e '\s\['|gzip > "$log_dir"/"$file_name"CMDps.txt.gz
-
-# 高頻度で使用されるディレクトリの情報取得
-echo -e "\e[36mdu -m > CMDdusize.txt"
-du -m / --max-depth=3 --exclude="/proc*" | sort -k1 -n -r |gzip > "$log_dir"/"$file_name"CMDdusize.txt.gz
 
 # メモリ、CPU、DiskI/O の事後取得
 (echo -e \\n"==================== AFTER  ===================="\\n ;vmstat -t ) |gzip >> "$log_dir"/"$file_name"CMDvmstat.txt.gz
@@ -201,4 +204,6 @@ fi
 
 # 最後にファイルを消す
 trap 'test -f "$tmplist" && rm -f "$tmplist"' 0
+
+echo -e "\e[m"
 
