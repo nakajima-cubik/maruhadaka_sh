@@ -1,5 +1,6 @@
 #!/bin/bash
 # exclusionlist.txt written by Yoshiki Nakajima
+# 2019/01/04
 
 # ルート直下にあるディレクトリで検索対象外としたいディレクトリ名を記載する
 # 注意： ”exclusion_dirs=(” と、最終行の ”)” を削除しないこと
@@ -15,3 +16,4 @@ exclusion_dirs=(
     /tmp
     /var
     )
+
