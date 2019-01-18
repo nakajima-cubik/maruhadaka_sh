@@ -206,4 +206,3 @@ fi
 trap 'test -f "$tmplist" && rm -f "$tmplist"' 0
 
 echo -e "\e[m"
-
