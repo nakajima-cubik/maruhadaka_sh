@@ -16,4 +16,3 @@ exclusion_dirs=(
     /tmp
     /var
     )
-
